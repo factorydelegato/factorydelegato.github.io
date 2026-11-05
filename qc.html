@@ -21,6 +21,6 @@ const v=l=>l.map(x=>x.value).join('');
 async function sha(s){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function chk(){const s=v(a),e=REG[s];
 if(s.length==8&&e){ed.style.display='block';ed.innerHTML='<b>EDITION '+e.ed+'</b>'+(e.img?'<img src="'+e.img+'">':'');rest.style.display='block';
-const f=s+v(b);if(f.length==64)ok.textContent=(await sha(f))==e.h?'VERIFIED. YOU OWN THIS.':'CODE DOES NOT MATCH.';else ok.textContent=''}
+const f=s+v(b);if(f.length==64)ok.textContent=(await sha(f))==e.h?'\u2713 VERIFIED':'\u2717';else ok.textContent=''}
 else{ed.style.display=rest.style.display='none';ok.textContent=s.length==8?'NOT ON THE REGISTER.':''}}
 </script></body></html>

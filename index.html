@@ -8,6 +8,6 @@ x.onpaste=e=>{e.preventDefault();const t=(e.clipboardData.getData('text')||'').r
 const v=l=>l.map(x=>x.value).join('');
 async function sha(s){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function chk(){const s=v(a),e=REG[s];
-if(s.length==8&&e){ed.style.display='block';ed.innerHTML=e.ed+(e.img?'<img src="'+e.img+'">':'');r2w.style.display='block';const f=s+v(b);ok.textContent=f.length==64?((await sha(f))==e.h?'\u2713':'\u2717'):''}
+if(s.length==8&&e){ed.style.display='block';ed.innerHTML=e.ed+(e.img?'<img src="'+e.img+'">':'');r2w.style.display='block';const f=s+v(b);ok.textContent=f.length==64?((await sha(f))==e.h?'\u2713 VERIFIED':'\u2717'):''}
 else{ed.style.display=r2w.style.display='none';ok.textContent=s.length==8?'\u2717':''}}
 </script></body></html>
