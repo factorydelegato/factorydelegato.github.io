@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>FACTORY DELEGATO</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;min-height:100vh;background:#ffc800;font-family:Oswald,sans-serif;color:#000}
+body{display:flex;flex-wrap:wrap;gap:24px;align-content:center;justify-content:center;padding:40px;box-sizing:border-box}
+.w{width:220px;background:#000;color:#ffc800;padding:20px 18px;box-sizing:border-box}
+.city{font:700 14px Oswald;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
+.time{font:700 42px Oswald;letter-spacing:.04em;margin:0;line-height:1}
+.date{font:400 13px Oswald;letter-spacing:.08em;margin:8px 0 0;opacity:.85}
+</style></head><body>
+<script>
+const CITIES=[
+  {n:'NEW YORK',z:'America/New_York'},
+  {n:'LONDON',z:'Europe/London'},
+  {n:'PARIS',z:'Europe/Paris'},
+  {n:'DUBAI',z:'Asia/Dubai'},
+  {n:'TOKYO',z:'Asia/Tokyo'},
+  {n:'LOS ANGELES',z:'America/Los_Angeles'}
+];
+const body=document.body;
+const cards=CITIES.map(c=>{
+  const d=document.createElement('div');d.className='w';
+  d.innerHTML=`<div class="city">${c.n}</div><div class="time"></div><div class="date"></div>`;
+  body.appendChild(d);return {z:c.z,t:d.querySelector('.time'),dt:d.querySelector('.date')};
+});
+function tick(){
+  const now=new Date();
+  cards.forEach(({z,t,dt})=>{
+    t.textContent=now.toLocaleTimeString('en-GB',{timeZone:z,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+    dt.textContent=now.toLocaleDateString('en-GB',{timeZone:z,weekday:'short',day:'numeric',month:'short'}).toUpperCase();
+  });
+}
+tick();setInterval(tick,1000);
+</script></body></html>
