@@ -9,19 +9,21 @@ svg{width:180px;height:180px}
 .city{font:700 28px Oswald,sans-serif;letter-spacing:.08em;margin-top:14px}
 </style></head><body>
 <script>
-const CITIES=[['NEW YORK','America/New_York'],['LONDON','Europe/London'],['PARIS','Europe/Paris'],['DUBAI','Asia/Dubai'],['TOKYO','Asia/Tokyo']];
+const CITIES=[['NEW YORK','America/New_York',40.71,-74.01],['LONDON','Europe/London',51.51,-0.13],['PARIS','Europe/Paris',48.86,2.35],['DUBAI','Asia/Dubai',25.20,55.27],['TOKYO','Asia/Tokyo',35.68,139.69]];
 let ticks='';for(let i=0;i<60;i++){const big=i%5==0;ticks+=`<line x1="100" y1="${big?14:10}" x2="100" y2="${big?28:18}" stroke="#000" stroke-width="${big?4:1.5}" transform="rotate(${i*6} 100 100)"/>`}
-const cl=CITIES.map(([n,z])=>{const d=document.createElement('div');d.className='w';
-d.innerHTML=`<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="none"/>${ticks}
+const cl=CITIES.map(([n,z,lat,lon])=>{const d=document.createElement('div');d.className='w';
+d.innerHTML=`<svg viewBox="0 0 200 200"><circle class="f" cx="100" cy="100" r="96" fill="#000" fill-opacity="0"/>${ticks}
 <line class="h" x1="100" y1="112" x2="100" y2="55" stroke="#000" stroke-width="7" stroke-linecap="round"/>
 <line class="m" x1="100" y1="116" x2="100" y2="30" stroke="#000" stroke-width="4.5" stroke-linecap="round"/>
 <line class="s" x1="100" y1="122" x2="100" y2="22" stroke="#e30613" stroke-width="2"/>
 <circle cx="100" cy="100" r="5" fill="#e30613"/></svg><div class="city">${n}</div>`;
-document.body.appendChild(d);return {z,h:d.querySelector('.h'),m:d.querySelector('.m'),s:d.querySelector('.s')}});
+document.body.appendChild(d);return {z,lat,lon,svg:d.querySelector('svg'),f:d.querySelector('.f'),h:d.querySelector('.h'),m:d.querySelector('.m'),s:d.querySelector('.s')}});
+function sunAlt(lat,lon,d){const r=Math.PI/180,j=d/864e5+2440587.5-2451545,g=(357.529+.98560028*j)*r,q=280.459+.98564736*j,L=(q+1.915*Math.sin(g)+.02*Math.sin(2*g))*r,e=(23.439-3.6e-7*j)*r,dec=Math.asin(Math.sin(e)*Math.sin(L)),ra=Math.atan2(Math.cos(e)*Math.sin(L),Math.cos(L)),gm=(280.46061837+360.98564736629*j)%360,ha=(gm+lon)*r-ra;return Math.asin(Math.sin(lat*r)*Math.sin(dec)+Math.cos(lat*r)*Math.cos(dec)*Math.cos(ha))/r}
+const mix=t=>{const c=(a,b)=>Math.round(a+(b-a)*t);return `rgb(${c(0,255)},${c(0,200)},${c(0,0)})`};
 function tick(){const now=new Date();cl.forEach(c=>{
 const [H,M,S]=now.toLocaleTimeString('en-GB',{timeZone:c.z,hour12:false}).split(':').map(Number);
 c.h.setAttribute('transform',`rotate(${(H%12)*30+M*.5} 100 100)`);
 c.m.setAttribute('transform',`rotate(${M*6+S*.1} 100 100)`);
-c.s.setAttribute('transform',`rotate(${S*6} 100 100)`)})}
+c.s.setAttribute('transform',`rotate(${S*6} 100 100)`);const t=Math.min(1,Math.max(0,(6-sunAlt(c.lat,c.lon,+now))/12));c.f.setAttribute('fill-opacity',t);const col=mix(t);c.svg.querySelectorAll('line:not(.s)').forEach(l=>l.setAttribute('stroke',col))})}
 tick();setInterval(tick,1000);
 </script></body></html>
