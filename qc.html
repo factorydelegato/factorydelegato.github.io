@@ -11,7 +11,7 @@ h1{font-weight:700;letter-spacing:.05em;margin:0 0 8px}p{margin:0 0 20px}
 <div class="g" id="r1"></div><div id="ed"></div><div id="rest"><p>ENTER THE FULL CODE</p><div class="g" id="r2"></div></div><div id="ok"></div>
 <script>
 // short code -> {edition, photo, h: sha256 of full code}. Full codes never published.
-const REG={"37268335":{ed:"TEST 0/96",img:"",h:"b5a300cc90cc2fe943fb4a21549c9a4a9dbdae8b67770b228d343f02b89584a0"}};
+const REG={}};
 const mk=(el,n)=>{for(let i=0;i<n;i++){const x=document.createElement('input');x.maxLength=1;el.appendChild(x)}return [...el.children]};
 const a=mk(r1,8),b=mk(r2,56),all=a.concat(b);
 all.forEach((x,i)=>{x.oninput=()=>{x.value=x.value.toLowerCase();if(x.value&&all[i+1]&&(i<7||rest.style.display))all[i+1].focus();chk()};
