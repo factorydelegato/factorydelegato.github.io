@@ -1,35 +1,27 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>FACTORY DELEGATO</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
 <style>
 html,body{margin:0;min-height:100vh;background:#ffc800;font-family:Oswald,sans-serif;color:#000}
-body{display:flex;flex-wrap:wrap;gap:24px;align-content:center;justify-content:center;padding:40px;box-sizing:border-box}
-.w{width:220px;background:#000;color:#ffc800;padding:20px 18px;box-sizing:border-box}
-.city{font:700 14px Oswald;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
-.time{font:700 42px Oswald;letter-spacing:.04em;margin:0;line-height:1}
-.date{font:400 13px Oswald;letter-spacing:.08em;margin:8px 0 0;opacity:.85}
+body{display:flex;flex-wrap:wrap;gap:40px;align-content:center;justify-content:center;padding:40px;box-sizing:border-box}
+.w{display:flex;flex-direction:column;align-items:center}
+svg{width:180px;height:180px}
+.city{font:700 14px Oswald;letter-spacing:.12em;margin-top:12px}
 </style></head><body>
 <script>
-const CITIES=[
-  {n:'NEW YORK',z:'America/New_York'},
-  {n:'LONDON',z:'Europe/London'},
-  {n:'PARIS',z:'Europe/Paris'},
-  {n:'DUBAI',z:'Asia/Dubai'},
-  {n:'TOKYO',z:'Asia/Tokyo'},
-  {n:'LOS ANGELES',z:'America/Los_Angeles'}
-];
-const body=document.body;
-const cards=CITIES.map(c=>{
-  const d=document.createElement('div');d.className='w';
-  d.innerHTML=`<div class="city">${c.n}</div><div class="time"></div><div class="date"></div>`;
-  body.appendChild(d);return {z:c.z,t:d.querySelector('.time'),dt:d.querySelector('.date')};
-});
-function tick(){
-  const now=new Date();
-  cards.forEach(({z,t,dt})=>{
-    t.textContent=now.toLocaleTimeString('en-GB',{timeZone:z,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-    dt.textContent=now.toLocaleDateString('en-GB',{timeZone:z,weekday:'short',day:'numeric',month:'short'}).toUpperCase();
-  });
-}
+const CITIES=[['NEW YORK','America/New_York'],['LONDON','Europe/London'],['PARIS','Europe/Paris'],['DUBAI','Asia/Dubai'],['TOKYO','Asia/Tokyo']];
+let ticks='';for(let i=0;i<60;i++){const big=i%5==0;ticks+=`<line x1="100" y1="${big?14:10}" x2="100" y2="${big?28:18}" stroke="#ffc800" stroke-width="${big?4:1.5}" transform="rotate(${i*6} 100 100)"/>`}
+const cl=CITIES.map(([n,z])=>{const d=document.createElement('div');d.className='w';
+d.innerHTML=`<svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="#000"/>${ticks}
+<line class="h" x1="100" y1="112" x2="100" y2="55" stroke="#ffc800" stroke-width="7" stroke-linecap="round"/>
+<line class="m" x1="100" y1="116" x2="100" y2="30" stroke="#ffc800" stroke-width="4.5" stroke-linecap="round"/>
+<line class="s" x1="100" y1="122" x2="100" y2="22" stroke="#e30613" stroke-width="2"/>
+<circle cx="100" cy="100" r="5" fill="#e30613"/></svg><div class="city">${n}</div>`;
+document.body.appendChild(d);return {z,h:d.querySelector('.h'),m:d.querySelector('.m'),s:d.querySelector('.s')}});
+function tick(){const now=new Date();cl.forEach(c=>{
+const [H,M,S]=now.toLocaleTimeString('en-GB',{timeZone:c.z,hour12:false}).split(':').map(Number);
+c.h.setAttribute('transform',`rotate(${(H%12)*30+M*.5} 100 100)`);
+c.m.setAttribute('transform',`rotate(${M*6+S*.1} 100 100)`);
+c.s.setAttribute('transform',`rotate(${S*6} 100 100)`)})}
 tick();setInterval(tick,1000);
 </script></body></html>
