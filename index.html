@@ -26,6 +26,6 @@ function tick(){const now=new Date();cl.forEach(c=>{
 const [H,M,S]=now.toLocaleTimeString('en-GB',{timeZone:c.z,hour12:false}).split(':').map(Number);
 c.h.setAttribute('transform',`rotate(${(H%12)*30+M*.5} 100 100)`);
 c.m.setAttribute('transform',`rotate(${M*6+S*.1} 100 100)`);
-c.s.setAttribute('transform',`rotate(${S*6} 100 100)`);const t=Math.min(1,Math.max(0,(6-sunAlt(c.lat,c.lon,+now))/12));c.f.setAttribute('fill-opacity',t);const col=mix(t);c.svg.querySelectorAll('line:not(.s)').forEach(l=>l.setAttribute('stroke',col))})}
+c.s.setAttribute('transform',`rotate(${S*6} 100 100)`);const t=Math.min(1,Math.max(0,(6-sunAlt(c.lat,c.lon,+now))/12));c.f.setAttribute('fill-opacity',t);const up=sunAlt(c.lat,c.lon,+now+6e5)>sunAlt(c.lat,c.lon,+now);const col=(up?t>0.03:t>=0.97)?mix(1):mix(0);c.svg.querySelectorAll('line:not(.s)').forEach(l=>l.setAttribute('stroke',col))})}
 tick();setInterval(tick,1000);
 </script></body></html>
